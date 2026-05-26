@@ -1,0 +1,38 @@
+import { useState, useEffect } from "react"
+import Login from "./Login"
+import Dashboard from "./Dashboard"
+
+export default function App() {
+  const [token, setToken] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token")
+    if (savedToken && savedToken !== "undefined" && savedToken !== "null") {
+      setToken(savedToken)
+    }
+    setLoading(false)
+  }, [])
+
+  const handleLogin = (newToken) => {
+    localStorage.setItem("token", newToken)
+    setToken(newToken)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    setToken(null)
+  }
+
+  if (loading) return (
+    <div style={{ background: "#0a0a0f", color: "#00e5ff",
+      height: "100vh", display: "flex",
+      alignItems: "center", justifyContent: "center" }}>
+      Loading...
+    </div>
+  )
+
+  if (!token) return <Login onLogin={handleLogin} />
+
+  return <Dashboard token={token} onLogout={handleLogout} />
+}
