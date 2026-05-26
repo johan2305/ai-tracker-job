@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.db import SessionLocal
@@ -16,7 +16,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/jobs", response_model=JobResponse)
+@router.post("/", response_model=JobResponse)
 def create_job(
     job: JobCreate,
     db: Session = Depends(get_db),
@@ -36,7 +36,7 @@ def create_job(
     db.refresh(new_job)
     return new_job
 
-@router.get("/jobs")
+@router.get("/")
 def get_jobs(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -46,7 +46,7 @@ def get_jobs(
     ).all()
     return jobs
 
-@router.put("/jobs/{job_id}")
+@router.put("/{job_id}")
 def update_job(
     job_id: int,
     updated_job: JobCreate,
@@ -58,7 +58,7 @@ def update_job(
         JobApplication.user_id == current_user.id
     ).first()
     if not job:
-        return {"error": "Job not found"}
+        raise HTTPException(status_code=404, detail="Job not found")
     job.company = updated_job.company
     job.position = updated_job.position
     job.status = updated_job.status
@@ -69,7 +69,7 @@ def update_job(
     db.refresh(job)
     return job
 
-@router.delete("/jobs/{job_id}")
+@router.delete("/{job_id}")
 def delete_job(
     job_id: int,
     db: Session = Depends(get_db),
@@ -80,7 +80,7 @@ def delete_job(
         JobApplication.user_id == current_user.id
     ).first()
     if not job:
-        return {"error": "Job not found"}
+        raise HTTPException(status_code=404, detail="Job not found")
     db.delete(job)
     db.commit()
     return {"message": "Job deleted successfully"}
