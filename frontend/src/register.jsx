@@ -5,31 +5,38 @@ export default function Register() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [message, setMessage] = useState("")
   const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const register = async () => {
-    try {
-      setError("")
-      setMessage("")
+    if (!name || !email || !password) {
+      setError("Please fill all fields")
+      return
+    }
 
+    setLoading(true)
+    setError("")
+    setMessage("")
+
+    try {
       await API.post("/auth/register", {
-        name,
-        email,
+        name: name.trim(),
+        email: email.trim(),
         password
       })
 
-      setMessage("Account created successfully")
+      setMessage("Account created successfully 🎉")
 
       setTimeout(() => {
         window.location.href = "/"
       }, 1500)
 
     } catch (err) {
-      setError(
-        err.response?.data?.detail ||
-        "Error creating account"
-      )
+      console.log("REGISTER ERROR:", err.response?.data)
+      setError(err.response?.data?.detail || "Error creating account")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -60,13 +67,21 @@ export default function Register() {
         </h1>
 
         {error && (
-          <div style={{ color: "#ff5555", marginBottom: 15 }}>
+          <div style={{
+            color: "#ff5555",
+            marginBottom: 10,
+            fontSize: 13
+          }}>
             {error}
           </div>
         )}
 
         {message && (
-          <div style={{ color: "#00e5ff", marginBottom: 15 }}>
+          <div style={{
+            color: "#00e5ff",
+            marginBottom: 10,
+            fontSize: 13
+          }}>
             {message}
           </div>
         )}
@@ -119,18 +134,19 @@ export default function Register() {
 
         <button
           onClick={register}
+          disabled={loading}
           style={{
             width: "100%",
             padding: "12px",
             borderRadius: 10,
             border: "none",
-            background: "#00e5ff",
+            background: loading ? "#007a8a" : "#00e5ff",
             color: "#0a0a0f",
             fontWeight: "bold",
-            cursor: "pointer"
+            cursor: loading ? "not-allowed" : "pointer"
           }}
         >
-          Register
+          {loading ? "Creating account..." : "Register"}
         </button>
 
         <p style={{
