@@ -6,21 +6,8 @@ from app.db.db import engine, Base
 from app.routes.auth import router as auth_router
 from app.routes.jobs import router as jobs_router
 from app.routes.ai import router as ai_router
-
 from app.models.user import User
 from app.models.job import JobApplication
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # en producción puedes poner tu frontend
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 app = FastAPI(title="AI Job Tracker API", version="1.0.0")
 
@@ -29,24 +16,26 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://ai-tracker-frontend.onrender.com",  # ← tu URL real de frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+async def startup():
+    Base.metadata.create_all(bind=engine)
 
-app.include_router(auth_router)
-app.include_router(jobs_router)
-app.include_router(ai_router)
-
+app.include_router(auth_router, prefix="/auth")
+app.include_router(jobs_router, prefix="/jobs")
+app.include_router(ai_router, prefix="/ai")
 
 @app.get("/")
 def root():
     try:
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
-        return {"status": "ok"}
+        return {"status": "ok", "db": "connected"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
