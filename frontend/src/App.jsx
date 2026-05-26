@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import Login from "./Login"
-import Dashboard from "./Dashboard"
+import Login from "./login";
+import Dashboard from "./dashboard";
 
 export default function App() {
   const [token, setToken] = useState(null)
