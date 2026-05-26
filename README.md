@@ -141,3 +141,12 @@ Frontend runs on:
 ```text
 http://localhost:5173
 ```
+
+# 🔑 Demo Account
+
+If registration is unavailable during deployment, use the demo account below:
+
+```text
+Email: johan2@test.com
+Password: 123456
+```
