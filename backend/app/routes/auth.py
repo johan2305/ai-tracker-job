@@ -8,10 +8,8 @@ from app.utils.security import hash_password, verify_password
 from app.utils.jwt import create_access_token
 from app.utils.dependencies import get_current_user
 
-# 🚨 ESTO SIEMPRE DEBE IR ARRIBA
 router = APIRouter()
 
-# DB dependency
 def get_db():
     db = SessionLocal()
     try:
@@ -20,18 +18,13 @@ def get_db():
         db.close()
 
 
-# =========================
 # REGISTER
-# =========================
 @router.post("/auth/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
 
     existing = db.query(User).filter(User.email == user.email).first()
     if existing:
-        raise HTTPException(
-            status_code=400,
-            detail="Email already registered"
-        )
+        raise HTTPException(status_code=400, detail="Email already registered")
 
     new_user = User(
         name=user.name,
@@ -46,9 +39,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-# =========================
 # LOGIN
-# =========================
 @router.post("/auth/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
 
@@ -73,13 +64,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     }
 
 
-# =========================
 # ME
-# =========================
 @router.get("/auth/me")
 def me(current_user: User = Depends(get_current_user)):
-    return {
-        "id": current_user.id,
-        "name": current_user.name,
-        "email": current_user.email
-    }
+    return current_user
