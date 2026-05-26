@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import API from "./api"
 
 export default function Login({ onLogin }) {
@@ -13,8 +14,10 @@ export default function Login({ onLogin }) {
       setError("Please fill in all fields")
       return
     }
+
     setLoading(true)
     setError("")
+
     try {
       const res = await API.post("/auth/login", { email, password })
       onLogin(res.data.access_token)
@@ -120,36 +123,61 @@ export default function Login({ onLogin }) {
               boxSizing: "border-box"
             }}
           />
-          <button type="button" onClick={() => setShowPass(!showPass)}
+
+          <button
+            type="button"
+            onClick={() => setShowPass(!showPass)}
             style={{
-              position: "absolute", right: 10, top: 10,
-              background: "transparent", border: "none",
-              color: "#6060a0", cursor: "pointer"
-            }}>
+              position: "absolute",
+              right: 10,
+              top: 10,
+              background: "transparent",
+              border: "none",
+              color: "#6060a0",
+              cursor: "pointer"
+            }}
+          >
             {showPass ? "🙈" : "👁️"}
           </button>
         </div>
 
-        <button onClick={login} disabled={loading}
+        <button
+          onClick={login}
+          disabled={loading}
           style={{
-            width: "100%", padding: "12px", borderRadius: 10,
-            border: "none", background: loading ? "#007a8a" : "#00e5ff",
-            color: "#0a0a0f", fontWeight: "bold",
+            width: "100%",
+            padding: "12px",
+            borderRadius: 10,
+            border: "none",
+            background: loading ? "#007a8a" : "#00e5ff",
+            color: "#0a0a0f",
+            fontWeight: "bold",
             cursor: loading ? "not-allowed" : "pointer"
-          }}>
+          }}
+        >
           {loading ? "Signing in..." : "Login →"}
         </button>
 
         <p style={{
-          textAlign: "center", fontSize: 12,
-          color: "#6060a0", marginTop: 18
+          textAlign: "center",
+          fontSize: 12,
+          color: "#6060a0",
+          marginTop: 18
         }}>
           Don't have an account?{" "}
-          <span onClick={() => window.location.href = "/register"}
-            style={{ color: "#00e5ff", cursor: "pointer" }}>
+
+          <Link
+            to="/register"
+            style={{
+              color: "#00e5ff",
+              cursor: "pointer",
+              textDecoration: "none"
+            }}
+          >
             Sign up
-          </span>
+          </Link>
         </p>
+
       </div>
     </div>
   )
