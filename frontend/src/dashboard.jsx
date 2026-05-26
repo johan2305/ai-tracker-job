@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import API from "./api"
-import CoverLetter from "./CoverLetter"
+import CoverLetter from "./coverletter";
 
 const STATUS_COLORS = {
   Applied:   { bg: "#00e5ff18", color: "#00e5ff" },
