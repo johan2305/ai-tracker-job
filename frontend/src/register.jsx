@@ -2,6 +2,7 @@ import { useState } from "react"
 import API from "./api"
 
 export default function Register() {
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [message, setMessage] = useState("")
@@ -13,6 +14,7 @@ export default function Register() {
       setMessage("")
 
       await API.post("/auth/register", {
+        name,
         email,
         password
       })
@@ -58,22 +60,31 @@ export default function Register() {
         </h1>
 
         {error && (
-          <div style={{
-            color: "#ff5555",
-            marginBottom: 15
-          }}>
+          <div style={{ color: "#ff5555", marginBottom: 15 }}>
             {error}
           </div>
         )}
 
         {message && (
-          <div style={{
-            color: "#00e5ff",
-            marginBottom: 15
-          }}>
+          <div style={{ color: "#00e5ff", marginBottom: 15 }}>
             {message}
           </div>
         )}
+
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: 12,
+            background: "#07070f",
+            border: "1px solid #1e1e2e",
+            borderRadius: 10,
+            color: "#fff"
+          }}
+        />
 
         <input
           placeholder="Email"
@@ -86,8 +97,7 @@ export default function Register() {
             background: "#07070f",
             border: "1px solid #1e1e2e",
             borderRadius: 10,
-            color: "#fff",
-            boxSizing: "border-box"
+            color: "#fff"
           }}
         />
 
@@ -103,8 +113,7 @@ export default function Register() {
             background: "#07070f",
             border: "1px solid #1e1e2e",
             borderRadius: 10,
-            color: "#fff",
-            boxSizing: "border-box"
+            color: "#fff"
           }}
         />
 
@@ -133,10 +142,7 @@ export default function Register() {
           Already have an account?{" "}
           <span
             onClick={() => window.location.href = "/"}
-            style={{
-              color: "#00e5ff",
-              cursor: "pointer"
-            }}
+            style={{ color: "#00e5ff", cursor: "pointer" }}
           >
             Login
           </span>
