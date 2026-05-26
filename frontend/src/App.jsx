@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react"
-import Login from "./login";
-import Dashboard from "./dashboard";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate
+} from "react-router-dom"
+
+import Login from "./login"
+import Register from "./register"
+import Dashboard from "./dashboard"
 
 export default function App() {
   const [token, setToken] = useState(null)
@@ -8,9 +16,15 @@ export default function App() {
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token")
-    if (savedToken && savedToken !== "undefined" && savedToken !== "null") {
+
+    if (
+      savedToken &&
+      savedToken !== "undefined" &&
+      savedToken !== "null"
+    ) {
       setToken(savedToken)
     }
+
     setLoading(false)
   }, [])
 
@@ -24,15 +38,51 @@ export default function App() {
     setToken(null)
   }
 
-  if (loading) return (
-    <div style={{ background: "#0a0a0f", color: "#00e5ff",
-      height: "100vh", display: "flex",
-      alignItems: "center", justifyContent: "center" }}>
-      Loading...
-    </div>
+  if (loading) {
+    return (
+      <div
+        style={{
+          background: "#0a0a0f",
+          color: "#00e5ff",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        Loading...
+      </div>
+    )
+  }
+
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        <Route
+          path="/"
+          element={
+            token
+              ? <Dashboard token={token} onLogout={handleLogout} />
+              : <Login onLogin={handleLogin} />
+          }
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            token
+              ? <Dashboard token={token} onLogout={handleLogout} />
+              : <Navigate to="/" />
+          }
+        />
+
+      </Routes>
+    </BrowserRouter>
   )
-
-  if (!token) return <Login onLogin={handleLogin} />
-
-  return <Dashboard token={token} onLogout={handleLogout} />
 }
