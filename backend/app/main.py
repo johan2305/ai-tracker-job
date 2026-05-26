@@ -9,6 +9,18 @@ from app.routes.ai import router as ai_router
 
 from app.models.user import User
 from app.models.job import JobApplication
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # en producción puedes poner tu frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app = FastAPI(title="AI Job Tracker API", version="1.0.0")
 

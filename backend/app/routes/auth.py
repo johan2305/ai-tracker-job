@@ -8,7 +8,9 @@ from app.utils.security import hash_password, verify_password
 from app.utils.jwt import create_access_token
 from app.utils.dependencies import get_current_user
 
+# ✅ ESTO ES LO QUE TE FALTABA
 router = APIRouter()
+
 
 def get_db():
     db = SessionLocal()
@@ -19,7 +21,7 @@ def get_db():
 
 
 # REGISTER
-@router.post("/auth/register", response_model=UserResponse)
+@router.post("/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
 
     existing = db.query(User).filter(User.email == user.email).first()
@@ -40,7 +42,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 
 
 # LOGIN
-@router.post("/auth/login")
+@router.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
 
     db_user = db.query(User).filter(User.email == user.email).first()
@@ -65,6 +67,10 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
 
 # ME
-@router.get("/auth/me")
+@router.get("/me")
 def me(current_user: User = Depends(get_current_user)):
-    return current_user
+    return {
+        "id": current_user.id,
+        "name": current_user.name,
+        "email": current_user.email
+    }
