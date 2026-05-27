@@ -8,7 +8,7 @@ from app.utils.security import hash_password, verify_password
 from app.utils.jwt import create_access_token
 from app.utils.dependencies import get_current_user
 
-# ✅ ESTO ES LO QUE TE FALTABA
+
 router = APIRouter()
 
 

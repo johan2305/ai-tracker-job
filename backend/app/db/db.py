@@ -9,7 +9,6 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 print("DATABASE_URL:", DATABASE_URL)
 
-# 🚨 FIX: fallback para evitar crash
 if not DATABASE_URL:
     raise Exception("DATABASE_URL no está configurada en el entorno")
 

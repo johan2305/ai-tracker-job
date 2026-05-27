@@ -14,7 +14,6 @@ class JobApplication(Base):
     company = Column(String, nullable=False)
     position = Column(String, nullable=False)
 
-    # 🔥 mejor control de estado
     status = Column(String, default="Applied", nullable=False)
 
     salary = Column(String, nullable=True)
@@ -26,7 +25,6 @@ class JobApplication(Base):
         server_default=func.now()
     )
 
-    # 🔗 relación usuario
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
 
     owner = relationship(

@@ -41,7 +41,7 @@ Notes: {data.notes}
 - start with Dear Hiring Manager
 """
 
-    # ✅ MODELO CORRECTO (EL QUE TIENES EN TU LISTA)
+    
     url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
     payload = {

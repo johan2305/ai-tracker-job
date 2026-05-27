@@ -19,17 +19,6 @@ Built with FastAPI + React + Gemini AI.
 
 ---
 
-# 👤 Demo Account
-
-If registration is unavailable during deployment, use:
-
-```text
-Email: johan2@test.com
-Password: 123456
-```
-
----
-
 # 🛠️ Tech Stack
 
 ## Frontend
@@ -114,6 +103,3 @@ GEMINI_API_KEY=your_api_key
 
 ---
 
-# 👨‍💻 Author
-
-Johan Belalcazar
