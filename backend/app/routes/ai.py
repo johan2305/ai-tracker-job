@@ -22,7 +22,8 @@ class CoverLetterRequest(BaseModel):
     notes: str = ""
 
 
-@router.post("/ai/cover-letter")
+# ✅ CORREGIDO AQUÍ
+@router.post("/cover-letter")
 def generate_cover_letter(
     data: CoverLetterRequest,
     current_user=Depends(get_current_user)
@@ -41,7 +42,6 @@ Notes: {data.notes}
 - start with Dear Hiring Manager
 """
 
-    
     url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
     payload = {
